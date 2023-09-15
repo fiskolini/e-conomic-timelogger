@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Timelogger.Entities;
+using TimeLogger.Entities;
 
-namespace Timelogger
+namespace TimeLogger
 {
 	public class ApiContext : DbContext
 	{

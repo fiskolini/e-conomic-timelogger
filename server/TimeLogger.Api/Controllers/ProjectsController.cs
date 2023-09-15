@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Timelogger.Api.Controllers
+namespace TimeLogger.Api.Controllers
 {
 	[Route("api/[controller]")]
 	public class ProjectsController : Controller
@@ -10,13 +10,6 @@ namespace Timelogger.Api.Controllers
 		public ProjectsController(ApiContext context)
 		{
 			_context = context;
-		}
-
-		[HttpGet]
-		[Route("hello-world")]
-		public string HelloWorld()
-		{
-			return "Hello Back!";
 		}
 
 		// GET api/projects

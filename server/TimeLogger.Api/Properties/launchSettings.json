@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Timelogger.Api": {
+    "TimeLogger.Api": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "api/values",
