@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeLogger.Domain\TimeLogger.Domain.csproj" />
+    </ItemGroup>
+
+
+
+
+
+</Project>

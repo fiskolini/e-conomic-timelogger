@@ -12,3 +12,12 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
+  
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+    
