@@ -1,4 +1,5 @@
 import 'tailwindcss/tailwind.css'
+import {Toaster} from "react-hot-toast";
 
 const App = ({Component, pageProps}) => {
     return (
@@ -11,9 +12,15 @@ const App = ({Component, pageProps}) => {
                 </div>
             </header>
 
+            <Toaster position="top-right"
+                     toastOptions={{
+                         duration: 6 * 1000
+                     }}
+            />
+
             <main>
                 <div className="container mx-auto">
-                    <Component/>
+                    <Component {...pageProps}/>
                 </div>
             </main>
         </>

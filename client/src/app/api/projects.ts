@@ -1,6 +1,9 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import {Project} from "@/app/models/project";
+import useRequest from "@/app/libs/useRequest";
+import {Return} from "@/app/types/ApiReturnType";
 
-export async function getAll() {
-    const response = await fetch(`${BASE_URL}/projects`);
-    return response.json();
+export function getAllProjects(): Return<Project[], unknown> {
+    return useRequest<Project[]>({
+        url: '/api/projects'
+    });
 }
