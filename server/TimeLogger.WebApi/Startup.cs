@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using TimeLogger.Entities;
+using TimeLogger.Api.Extensions;
+using TimeLogger.Application.Common.Behaviors;
+using TimeLogger.Persistence;
 
 namespace TimeLogger.Api
 {
@@ -31,7 +32,7 @@ namespace TimeLogger.Api
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("e-conomic interview"));
+            // TODO pass to infrastructure
             services.AddLogging(builder =>
             {
                 builder.AddConsole();
@@ -39,6 +40,15 @@ namespace TimeLogger.Api
             });
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            services.ConfigurePersistence(Configuration);
+            services.ConfigureApplication();
+
+            services.ConfigureApiBehavior();
+            services.ConfigureCorsPolicy();
+
+            // services.AddControllers();
+
 
             if (_environment.IsDevelopment())
             {
@@ -69,6 +79,8 @@ namespace TimeLogger.Api
                     .AllowCredentials());
             }
 
+            app.UseMvc();
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -76,28 +88,8 @@ namespace TimeLogger.Api
                 options.RoutePrefix = "docs";
             });
 
-            app.UseMvc();
-
-
-            var serviceScopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
-            using (var scope = serviceScopeFactory.CreateScope())
-            {
-                SeedDatabase(scope);
-            }
-        }
-
-        private static void SeedDatabase(IServiceScope scope)
-        {
-            var context = scope.ServiceProvider.GetService<ApiContext>();
-            var testProject1 = new Project
-            {
-                Id = 1,
-                Name = "e-conomic Interview"
-            };
-
-            context.Projects.Add(testProject1);
-
-            context.SaveChanges();
+            app.UsePersistence();
+            app.UseErrorHandler();
         }
     }
 }

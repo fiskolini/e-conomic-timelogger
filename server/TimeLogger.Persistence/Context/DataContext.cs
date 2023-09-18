@@ -1,0 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using TimeLogger.Domain.Entities;
+
+namespace TimeLogger.Persistence.Context
+{
+    public class DataContext : DbContext
+    {
+        public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Project> Projects { get; set; }
+    }
+}

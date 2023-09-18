@@ -3,14 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>TimeLogger.Api</RootNamespace>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\TimeLogger\TimeLogger.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TimeLogger.Application\TimeLogger.Application.csproj" />
+    <ProjectReference Include="..\TimeLogger.Persistence\TimeLogger.Persistence.csproj" />
+  </ItemGroup>
+
 
 </Project>

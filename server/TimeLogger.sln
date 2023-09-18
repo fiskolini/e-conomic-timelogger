@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger.WebApi", "TimeLogger.WebApi\TimeLogger.WebApi.csproj", "{586001F3-4417-4AFF-BB35-FA09226B7107}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger", "TimeLogger\TimeLogger.csproj", "{9B0E1AAC-9A93-43AA-BDB6-39A40D60E29A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger.Api.Tests", "TimeLogger.Api.Tests\TimeLogger.Api.Tests.csproj", "{A39C1D9A-FF95-42DE-A475-166590F95B83}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D7332F1C-67DC-4221-B579-1DF26A5E4E1D}"
@@ -19,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger.Application", "TimeLogger.Application\TimeLogger.Application.csproj", "{FBF4FC64-F776-465D-9577-05033E5F92E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeLogger.Persistence", "TimeLogger.Persistence\TimeLogger.Persistence.csproj", "{4875194E-7C16-4A4E-8B59-12A2A47C96FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +29,6 @@ Global
 		{586001F3-4417-4AFF-BB35-FA09226B7107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{586001F3-4417-4AFF-BB35-FA09226B7107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{586001F3-4417-4AFF-BB35-FA09226B7107}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B0E1AAC-9A93-43AA-BDB6-39A40D60E29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B0E1AAC-9A93-43AA-BDB6-39A40D60E29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B0E1AAC-9A93-43AA-BDB6-39A40D60E29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B0E1AAC-9A93-43AA-BDB6-39A40D60E29A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A39C1D9A-FF95-42DE-A475-166590F95B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A39C1D9A-FF95-42DE-A475-166590F95B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A39C1D9A-FF95-42DE-A475-166590F95B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{FBF4FC64-F776-465D-9577-05033E5F92E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBF4FC64-F776-465D-9577-05033E5F92E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBF4FC64-F776-465D-9577-05033E5F92E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4875194E-7C16-4A4E-8B59-12A2A47C96FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4875194E-7C16-4A4E-8B59-12A2A47C96FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4875194E-7C16-4A4E-8B59-12A2A47C96FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4875194E-7C16-4A4E-8B59-12A2A47C96FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +53,6 @@ Global
 		{D68AEB19-6762-4CFB-B4EC-73FD542D581E} = {D7332F1C-67DC-4221-B579-1DF26A5E4E1D}
 		{586001F3-4417-4AFF-BB35-FA09226B7107} = {FDC5DD68-2772-4C04-9B97-9E1EAADA50DD}
 		{FBF4FC64-F776-465D-9577-05033E5F92E5} = {D7332F1C-67DC-4221-B579-1DF26A5E4E1D}
+		{4875194E-7C16-4A4E-8B59-12A2A47C96FB} = {BAD707A3-1A80-4BED-B7B2-19A60C25425F}
 	EndGlobalSection
 EndGlobal
