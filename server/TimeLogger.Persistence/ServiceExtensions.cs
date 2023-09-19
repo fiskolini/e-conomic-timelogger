@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,10 @@ namespace TimeLogger.Persistence
             var testProject1 = new Project
             {
                 Id = 1,
-                Name = "e-conomic Interview"
+                Name = "e-conomic Interview",
+                TimeAllocated = TimeSpan.FromMinutes(22),
+                DateCreated = new DateTimeOffset(),
+                Deadline = DateTimeOffset.UtcNow.AddDays(-2)
             };
 
             context.Projects.Add(testProject1);

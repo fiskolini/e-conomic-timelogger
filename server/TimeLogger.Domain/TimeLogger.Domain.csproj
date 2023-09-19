@@ -3,11 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <LangVersion>8</LangVersion>
+        <LangVersion>8.0</LangVersion>
         <OutputType>Library</OutputType>
     </PropertyGroup>
-
-
-
-
 </Project>

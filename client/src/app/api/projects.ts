@@ -1,9 +1,11 @@
-import {Project} from "@/app/models/project";
-import useRequest from "@/app/libs/useRequest";
-import {Return} from "@/app/types/ApiReturnType";
+import {Project} from "@/app/models/Project";
+import {apiClient} from "@/app/api/apiClient";
+import {AxiosResponse} from "axios";
 
-export function getAllProjects(): Return<Project[], unknown> {
-    return useRequest<Project[]>({
-        url: '/api/projects'
-    });
+type GetUsersResponse = {
+    data: Project[];
+};
+
+export function getAllProjects(): Promise<AxiosResponse<GetUsersResponse>> {
+    return apiClient.get<GetUsersResponse>('/api/projects');
 }
