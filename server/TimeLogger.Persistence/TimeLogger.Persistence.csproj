@@ -9,7 +9,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Bogus" Version="34.0.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.32" />
     </ItemGroup>
+
+
+
 
 </Project>

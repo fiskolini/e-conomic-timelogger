@@ -2,19 +2,19 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TimeLogger.Api.Extensions;
 using TimeLogger.Application.Common.Behaviors;
 using TimeLogger.Persistence;
+using TimeLogger.Persistence.Common;
 
 namespace TimeLogger.Api
 {
     public class Startup
     {
         private readonly IWebHostEnvironment _environment;
-        public IConfigurationRoot Configuration { get; }
+        private IConfigurationRoot Configuration { get; }
 
         public Startup(IWebHostEnvironment env)
         {
@@ -31,41 +31,25 @@ namespace TimeLogger.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            // TODO pass to infrastructure
-            services.AddLogging(builder =>
-            {
-                builder.AddConsole();
-                builder.AddDebug();
-            });
-
-            services.AddMvc(options => options.EnableEndpointRouting = false);
-
-            services.ConfigurePersistence(Configuration);
-            services.ConfigureApplication();
-
-            services.ConfigureApiBehavior();
-            services.ConfigureCorsPolicy();
-
-            // services.AddControllers();
-
-
-            if (_environment.IsDevelopment())
-            {
-                services.AddCors();
-            }
+            services.AddMvc(options => { options.EnableEndpointRouting = false; });
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddSwaggerGen(swagger =>
             {
                 //This is to generate the Default UI of Swagger Documentation
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Version = "v1",
                     Title = "e-conomic & sproom hiring task",
                     Description = "Visma Technical Challenge - Francisco Carvalho"
                 });
-                // To Enable authorization using Swagger (JWT)
             });
+
+
+            services.ConfigurePersistence(Configuration);
+            services.ConfigureApplication();
+
+            services.ConfigureApiBehavior();
+            services.ConfigureCorsPolicy();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,6 +63,8 @@ namespace TimeLogger.Api
                     .AllowCredentials());
             }
 
+            app.UsePersistence();
+            app.UseErrorHandler();
             app.UseMvc();
 
             app.UseSwagger();
@@ -87,9 +73,6 @@ namespace TimeLogger.Api
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 options.RoutePrefix = "docs";
             });
-
-            app.UsePersistence();
-            app.UseErrorHandler();
         }
     }
 }

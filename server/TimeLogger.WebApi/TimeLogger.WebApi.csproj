@@ -13,7 +13,9 @@
   <ItemGroup>
     <ProjectReference Include="..\TimeLogger.Application\TimeLogger.Application.csproj" />
     <ProjectReference Include="..\TimeLogger.Persistence\TimeLogger.Persistence.csproj" />
+
   </ItemGroup>
+
 
 
 

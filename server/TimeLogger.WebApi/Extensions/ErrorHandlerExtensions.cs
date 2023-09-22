@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Internal;
 using TimeLogger.Application.Common.Exceptions;
 
 namespace TimeLogger.Api.Extensions
@@ -17,14 +20,16 @@ namespace TimeLogger.Api.Extensions
                 appError.Run(async context =>
                 {
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    string[] errors = null;
                     if (contextFeature == null) return;
 
                     context.Response.ContentType = "application/json";
 
                     switch (contextFeature.Error)
                     {
-                        case BadRequestException _:
+                        case BadRequestException exception:
                             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                            errors = exception.Errors;
                             break;
                         case OperationCanceledException _:
                             context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
@@ -37,11 +42,15 @@ namespace TimeLogger.Api.Extensions
                             break;
                     }
 
-                    var errorResponse = new
+                    var errorResponse = new ExpandoObject() as IDictionary<string, object>;
+
+                    errorResponse["statusCode"] = context.Response.StatusCode;
+                    errorResponse["message"] = contextFeature.Error.GetBaseException().Message;
+
+                    if (errors != null)
                     {
-                        statusCode = context.Response.StatusCode,
-                        message = contextFeature.Error.GetBaseException().Message
-                    };
+                        errorResponse["errors"] = errors;
+                    }
 
                     await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
                 });
