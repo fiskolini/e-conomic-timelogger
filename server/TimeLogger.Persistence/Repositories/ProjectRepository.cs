@@ -32,7 +32,7 @@ namespace TimeLogger.Persistence.Repositories
 
             var totalItems = await query.CountAsync(cancellationToken);
 
-            query.WithPagedResults(request);
+            query = query.WithPagedResults(request);
 
             var results = await GetAll(query, cancellationToken);
 

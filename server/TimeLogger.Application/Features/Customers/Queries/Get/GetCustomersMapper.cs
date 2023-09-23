@@ -3,9 +3,9 @@ using TimeLogger.Domain.Entities;
 
 namespace TimeLogger.Application.Features.Customers.Queries.Get
 {
-    public class GetProjectMapper : Profile
+    public class GetCustomersMapper : Profile
     {
-        public GetProjectMapper()
+        public GetCustomersMapper()
         {
             CreateMap<Customer, GetCustomersResponse>();
             CreateMap<PagedResults<Customer>, PagedResults<GetCustomersResponse>>();

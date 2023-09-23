@@ -3,14 +3,12 @@ using TimeLogger.Application.Common.Validators;
 
 namespace TimeLogger.Application.Features.Projects.Commands.CreateProject
 {
-    public class GetProjectCommandValidator : AbstractValidator<ProjectRequest<CreateProjectResponse>>
+    public class CreateProjectCommandValidator : AbstractValidator<ProjectRequest<CreateProjectResponse>>
     {
-        public GetProjectCommandValidator()
+        public CreateProjectCommandValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50);
+                .ValidCommonName();
 
             RuleFor(x => x.Deadline)
                 .NotEmpty()

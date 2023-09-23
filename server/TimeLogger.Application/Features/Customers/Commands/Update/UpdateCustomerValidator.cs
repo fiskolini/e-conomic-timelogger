@@ -1,4 +1,5 @@
 using FluentValidation;
+using TimeLogger.Application.Common.Validators;
 
 namespace TimeLogger.Application.Features.Customers.Commands.Update
 {
@@ -7,9 +8,7 @@ namespace TimeLogger.Application.Features.Customers.Commands.Update
         public UpdateCustomerValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50);
+                .ValidCommonName();
         }
     }
 }

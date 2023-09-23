@@ -5,6 +5,7 @@ import {Customer} from "@/app/types/entities/Customer";
 import EyeIcon from "@/ui/icons/eye";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import {MouseEvent} from "react";
 
 export default function Actions({customer, handleRefresh, loading}: {
     customer: Customer,
@@ -30,7 +31,7 @@ export default function Actions({customer, handleRefresh, loading}: {
     /**
      * Delete project handler
      */
-    function handleUpdate(value: string | null = null) {
+    function handleUpdate(value: MouseEvent<SVGSVGElement> | string | null = null) {
         if (loading) return;
 
         const newName = prompt(
@@ -60,16 +61,17 @@ export default function Actions({customer, handleRefresh, loading}: {
 
     return (
         <div className='flex justify-around'>
-            <button className="cursor-pointer text-gray-400 hover:text-blue-400" disabled={loading}>
+            <button className="cursor-pointer text-gray-400 hover:text-blue-400"
+                    disabled={loading}>
                 <EditIcon onClick={handleUpdate}/>
             </button>
 
             <Link className="cursor-pointer text-gray-400 hover:text-green-600" href={`customers/${customer.id}`}>
-                <EyeIcon onClick={() => {
-                }}/>
+                <EyeIcon/>
             </Link>
 
-            <button className="cursor-pointer text-gray-400 hover:text-red-500" disabled={loading}>
+            <button className="cursor-pointer text-gray-400 hover:text-red-500"
+                    disabled={loading}>
                 <CrossIcon onClick={handleDelete}/>
             </button>
         </div>

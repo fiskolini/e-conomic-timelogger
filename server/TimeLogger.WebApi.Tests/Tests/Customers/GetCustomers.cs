@@ -22,11 +22,34 @@ namespace TimeLogger.Api.Tests.Tests.Customers
         }
 
         [Fact]
+        public async Task GetCustomer_HappyPath()
+        {
+            // Arrange
+            var cancellationToken = new CancellationToken();
+            var customerRequest = new GetSingleCustomerCommand { Id = 2 };
+
+            // Set up the mediator to return a specific result when Send is called
+            var expectedResponse = new GetSingleCustomerResponse { Id = customerRequest.Id };
+
+            // Act
+            var response = await _httpClient.GetAsync($"api/customers/{customerRequest.Id}", cancellationToken);
+            var returnedJson = await response.Content.ReadAsStringAsync();
+            var returnedCustomer = JsonConvert.DeserializeObject<GetSingleCustomerResponse>(returnedJson);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(expectedResponse.Id, returnedCustomer.Id);
+            Assert.NotNull(returnedCustomer.Name);
+            Assert.Null(returnedCustomer.DateDeleted);
+            Assert.True(returnedCustomer.NumberOfProjects > 1);
+        }
+
+        [Fact]
         public async Task GetCustomer_PagedResults_ShouldReturnCorrectly()
         {
             // Arrange
             var cancellationToken = new CancellationToken();
-            var request = new GetCustomersRequest { PageSize = 2, PageNumber = 2 };
+            var request = new GetCustomersCommand { PageSize = 2, PageNumber = 2 };
 
             // Set up the mediator to return a specific result when Send is called
             var expectedResponse = new PagedResults<GetCustomersResponse>
@@ -50,26 +73,35 @@ namespace TimeLogger.Api.Tests.Tests.Customers
         }
 
         [Fact]
-        public async Task GetCustomer_HappyPath()
+        public async Task GetCustomer_PagedResults_ShouldReturnBadRequestOnGiganticLimit()
         {
             // Arrange
             var cancellationToken = new CancellationToken();
-            var customerRequest = new GetSingleCustomerCommand { Id = 2 };
-
-            // Set up the mediator to return a specific result when Send is called
-            var expectedResponse = new GetSingleCustomerResponse { Id = customerRequest.Id };
+            var request = new GetCustomersCommand { PageSize = 501 };
 
             // Act
-            var response = await _httpClient.GetAsync($"api/customers/{customerRequest.Id}", cancellationToken);
+            var response = await _httpClient.GetAsync($"api/customers/?pageSize={request.PageSize}", cancellationToken);
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetCustomer_FilterBySearch_ShouldReturnCorrectly()
+        {
+            // Arrange
+            var cancellationToken = new CancellationToken();
+            var request = new PagedRequest { Search = "conomic" };
+
+            // Act
+            var response = await _httpClient.GetAsync(
+                $"api/customers/?search={request.Search}", cancellationToken);
             var returnedJson = await response.Content.ReadAsStringAsync();
-            var returnedCustomer = JsonConvert.DeserializeObject<GetSingleCustomerResponse>(returnedJson);
+            var returnedCustomer = JsonConvert.DeserializeObject<PagedResults<GetCustomersResponse>>(returnedJson);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(expectedResponse.Id, returnedCustomer.Id);
-            Assert.NotNull(returnedCustomer.Name);
-            Assert.Null(returnedCustomer.DateDeleted);
-            Assert.True(returnedCustomer.NumberOfProjects > 1);
+            Assert.True(returnedCustomer.Data.Count >= 1);
         }
 
         [Fact]

@@ -8,7 +8,7 @@ using TimeLogger.Domain.Repositories;
 
 namespace TimeLogger.Application.Features.Customers.Queries.Get
 {
-    public sealed class GetCustomersHandler : IRequestHandler<GetCustomersRequest, PagedResults<GetCustomersResponse>>
+    public sealed class GetCustomersHandler : IRequestHandler<GetCustomersCommand, PagedResults<GetCustomersResponse>>
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
@@ -19,12 +19,12 @@ namespace TimeLogger.Application.Features.Customers.Queries.Get
             _mapper = mapper;
         }
 
-        public async Task<PagedResults<GetCustomersResponse>> Handle(GetCustomersRequest request, CancellationToken cancellationToken)
+        public async Task<PagedResults<GetCustomersResponse>> Handle(GetCustomersCommand command, CancellationToken cancellationToken)
         {
-            var data = await _customerRepository.GetAll(request, cancellationToken, request.ConsiderDeleted);
+            var data = await _customerRepository.GetAll(command, cancellationToken, command.ConsiderDeleted);
             var response = _mapper.Map<PagedResults<GetCustomersResponse>>(data);
             var counts = await _customerRepository.GetProjectsCounts(data.Data.Select(c => c.Id).ToList(),
-                cancellationToken, request.ConsiderDeleted);
+                cancellationToken, command.ConsiderDeleted);
 
             foreach (var item in response.Data)
             {

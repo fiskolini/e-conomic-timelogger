@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TimeLogger.Domain.Entities;
 using TimeLogger.Domain.Repositories;
+using TimeLogger.Persistence.Common.Extensions;
 using TimeLogger.Persistence.Context;
 using TimeLogger.Persistence.Repositories.Common;
 
@@ -25,7 +26,7 @@ namespace TimeLogger.Persistence.Repositories
 
             return query.FirstOrDefaultAsync(cancellationToken);
         }
-        
+
         public async Task<Dictionary<int, int>> GetProjectsCounts(List<int> customerIds,
             CancellationToken cancellationToken, bool considerDeleted = false)
         {
@@ -35,6 +36,29 @@ namespace TimeLogger.Persistence.Repositories
                 .ToDictionary(k => k.id, i => i.count);
 
             return query;
+        }
+
+        public async Task<PagedResults<Customer>> GetAll(PagedRequest request, CancellationToken cancellationToken,
+            bool considerDeleted = false)
+        {
+            var query = GetQuery(considerDeleted);
+            if (request.Search != null)
+            {
+                query = query.Where(x => x.Name.Contains(request.Search) || x.Id.ToString() == request.Search);
+            }
+
+            var totalItems = await query.CountAsync(cancellationToken);
+            var items = await query
+                .WithPagedResults(request)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResults<Customer>
+            {
+                Data = items,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                TotalItems = totalItems
+            };
         }
     }
 }

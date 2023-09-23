@@ -1,28 +1,37 @@
 import {apiClient} from "@/app/api/apiClient";
 import {AxiosResponse} from "axios";
-import {ApiResponse} from "@/app/types/api/ApiResponse";
+import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {Customer} from "@/app/types/entities/Customer";
-
+import {ApiPagedRequest} from "@/app/types/api/request/ApiPagedRequest";
 
 /**
  * Create a new customer given customer
  * @param name
  */
-export function createCustomer(name: string): Promise<AxiosResponse<ApiResponse<Customer>>> {
-    return apiClient.post<ApiResponse<Customer>>('/api/customers/', {name});
+export function createCustomer(name: string): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
+    return apiClient.post<ApiPagedResponse<Customer>>('/api/customers/', {name});
 }
 
 /**
  * Load all customers
- * @param page
- * @param needle
+ * @param r
  */
-export function getAllCustomers(page: number, needle: string | null): Promise<AxiosResponse<ApiResponse<Customer>>> {
-    let url = `/api/customers?pageNumber=${page}`;
-    if (needle !== null) {
-        url += `&search=${needle}`
+export function getAllCustomers(r: ApiPagedRequest): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
+    let params: ApiPagedRequest = {};
+
+    if (r.pageNumber !== null) {
+        params.pageNumber = r.pageNumber
     }
-    return apiClient.get<ApiResponse<Customer>>(url);
+
+    if (r.search !== null) {
+        params.search = r.search;
+    }
+
+    if (r.considerDeleted !== null) {
+        params.considerDeleted = r.considerDeleted;
+    }
+    
+    return apiClient.get<ApiPagedResponse<Customer>>('/api/customers', {params});
 }
 
 /**
@@ -30,14 +39,14 @@ export function getAllCustomers(page: number, needle: string | null): Promise<Ax
  * @param id
  * @param data
  */
-export function updateCustomer(id: number, data: Customer): Promise<AxiosResponse<ApiResponse<Customer>>> {
-    return apiClient.patch<ApiResponse<Customer>>(`/api/customers/${id}`, data);
+export function updateCustomer(id: number, data: Customer): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
+    return apiClient.patch<ApiPagedResponse<Customer>>(`/api/customers/${id}`, data);
 }
 
 /**
  * Delete given customer
  * @param id
  */
-export function deleteCustomer(id: number): Promise<AxiosResponse<ApiResponse<Customer>>> {
-    return apiClient.delete<ApiResponse<Customer>>(`/api/customers/${id}`);
+export function deleteCustomer(id: number): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
+    return apiClient.delete<ApiPagedResponse<Customer>>(`/api/customers/${id}`);
 }

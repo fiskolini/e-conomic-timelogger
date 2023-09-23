@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build",
     "module": "esnext",
-    "target": "es6",
+    "target": "es5",
     "lib": [
       "es6",
       "dom",
@@ -14,7 +14,7 @@
     },
     "sourceMap": true,
     "noEmit": true,
-    "allowJs": false,
+    "allowJs": true,
     "jsx": "preserve",
     "declaration": true,
     "moduleResolution": "node",
@@ -28,7 +28,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
@@ -41,11 +41,14 @@
   "exclude": [
     "node_modules",
     "build",
+    "cypress",
     "dist",
     "docs"
   ],
   "include": [
-    "src",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
     ".next/types/**/*.ts"
   ]
 }

@@ -1,14 +1,16 @@
 import Spinner from "@/ui/icons/spinner";
 import Actions from "@/ui/components/Customers/Actions";
-import {ApiResponse} from "@/app/types/api/ApiResponse";
+import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {Customer} from "@/app/types/entities/Customer";
 import Pagination from "@/ui/components/Pagination";
+import {NumberedArgumentFunction} from "@/app/types/handers/NumberedArgumentFunction";
+import TableHeader from "@/ui/components/TableHeader";
 
 
-export default function Table({data, loading, loadData, currentPage}: {
-    data: ApiResponse<Customer> | undefined,
+export default function CustomersTable({data, loading, loadData, currentPage}: {
+    data: ApiPagedResponse<Customer> | undefined,
     loading: boolean,
-    loadData: Function,
+    loadData: NumberedArgumentFunction,
     currentPage: number
 }) {
     const tableHeader = [
@@ -17,22 +19,10 @@ export default function Table({data, loading, loadData, currentPage}: {
 
     return (
         <>
-            <table className={`table-fixed w-full ${loading ? 'opacity-50' : ''}`}>
-                <thead className="bg-gray-200">
-                <tr>
-                    {
-                        tableHeader?.map(function (item, i) {
-                            return (
-                                <th key={i} className={`border px-4 py-2 ${i === 0 ? 'w-12' : ''}`}>
-                                    {item}
-                                </th>
-                            )
-                        })
-                    }
-                </tr>
-                </thead>
+            <table className={`table-fixed w-full ${loading ? 'opacity-50 cursor-wait' : ''}`}>
+                <TableHeader items={tableHeader}/>
+                
                 <tbody className='text-gray-500'>
-
                 {typeof data === "undefined" &&
                     // Skeleton while loading in the background
                     Object.keys(Array.from(Array(3))).map(function (ri) {
@@ -54,7 +44,8 @@ export default function Table({data, loading, loadData, currentPage}: {
                     // Real rows populated from data
                     data?.data.map(function (item, i) {
                         return (
-                            <tr key={i} className='text-center border'>
+                            <tr key={i}
+                                className={`text-center border ${item.dateDeleted !== null ? 'opacity-30 bg-gray-200' : ''}`}>
                                 <th className='border px-4 py-2 text-gray-400 text-xs'>
                                     {item.id}
                                 </th>
@@ -68,7 +59,9 @@ export default function Table({data, loading, loadData, currentPage}: {
                                     {item.totalTimeAllocated} <span className='text-xs text-gray-500'> mins.</span>
                                 </th>
                                 <th className="border px-4 py-2">
-                                    <Actions handleRefresh={loadData} customer={item}/>
+                                    {item.dateDeleted === null &&
+                                        <Actions loading={loading} handleRefresh={loadData} customer={item}/>
+                                    }
                                 </th>
                             </tr>
                         )

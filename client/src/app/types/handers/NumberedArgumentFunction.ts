@@ -1,0 +1,1 @@
+export type NumberedArgumentFunction = (arg: number) => void;

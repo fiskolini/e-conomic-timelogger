@@ -1,9 +1,10 @@
-import {ApiResponse} from "@/app/types/api/ApiResponse";
+import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
+import {NumberedArgumentFunction} from "@/app/types/handers/NumberedArgumentFunction";
 
 export default function Pagination<T>({data, loading, loadHandler, currentPage}: {
-    data: ApiResponse<T>,
+    data: ApiPagedResponse<T>,
     loading: boolean,
-    loadHandler: Function,
+    loadHandler: NumberedArgumentFunction,
     currentPage: number
 }) {
     return (

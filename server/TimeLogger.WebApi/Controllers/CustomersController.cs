@@ -24,10 +24,10 @@ namespace TimeLogger.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedResults<GetCustomersResponse>>> GetAll(GetCustomersRequest pagedRequest,
+        public async Task<ActionResult<PagedResults<GetCustomersResponse>>> GetAll(GetCustomersCommand pagedCommand,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(pagedRequest, cancellationToken);
+            var response = await _mediator.Send(pagedCommand, cancellationToken);
             return Ok(response);
         }
 

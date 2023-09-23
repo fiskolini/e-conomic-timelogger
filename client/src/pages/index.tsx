@@ -1,47 +1,53 @@
 import dynamic from "next/dynamic";
 import {MouseEvent, useEffect, useState} from "react";
-import {ApiResponse} from "@/app/types/api/ApiResponse";
-import {Customer} from "@/app/types/entities/Customer";
-import {createCustomer, getAllCustomers} from "@/app/api/customers";
 import {AxiosResponse} from "axios";
 import toast from "react-hot-toast";
-import {ApiErrorResponse} from "@/app/types/api/ApiErrorResponse";
+
+import {createCustomer, getAllCustomers} from "@/app/api/customers";
+
+import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
+import {Customer} from "@/app/types/entities/Customer";
+import {ApiErrorResponse} from "@/app/types/api/response/ApiErrorResponse";
+import {ApiPagedRequest} from "@/app/types/api/request/ApiPagedRequest";
+
 
 const Table = dynamic(
-    () => import('@/ui/components/Customers/Table').then(m => m.default));
+    () => import('@/ui/components/Customers/CustomersTable').then(m => m.default));
 
 export default function Home() {
-    const [searchState, setSearchState] = useState<string>('');
-    const [dataState, setDataState] = useState<ApiResponse<Customer>>();
-    const [loadingState, setLoadingState] = useState<boolean>(false);
-    const [currentPageState, setCurrentPageState] = useState<number>(1);
+    let [showDeletedState, setShowDeletedState] = useState<boolean>(false);
+    let [searchState, setSearchState] = useState<string>('');
+    let [dataState, setDataState] = useState<ApiPagedResponse<Customer>>();
+    let [loadingState, setLoadingState] = useState<boolean>(false);
+    let [currentPageState, setCurrentPageState] = useState<number>(1);
 
     useEffect(loadDataHandler, []);
 
     /**
      * Load data handler
-     * @param page
      */
-    function loadDataHandler(page: number = currentPageState) {
+    function loadDataHandler(page = currentPageState) {
         setLoadingState(true);
+
+        let request: ApiPagedRequest = {
+            pageNumber: page,
+            search: searchState,
+            considerDeleted: showDeletedState
+        }
+
         setTimeout(() => {
-            getAllCustomers(page, searchState).then((res: AxiosResponse<ApiResponse<Customer>>) => {
+            getAllCustomers(request).then((res: AxiosResponse<ApiPagedResponse<Customer>>) => {
                 setDataState(res.data);
                 setCurrentPageState(res.data.pageNumber);
                 setLoadingState(false);
             });
         }, 500);
     }
-    
-    function handleSearch(event: MouseEvent<HTMLElement>){
-        event.preventDefault();
-        loadDataHandler();
-    }
 
     /**
      * Add customer handler
      */
-    function addCustomerHandler() {
+    function handleAddCustomer() {
         const newName = prompt('Please insert a name for a new customer');
 
         if (newName === null) {
@@ -61,14 +67,37 @@ export default function Home() {
         });
     }
 
+    /**
+     * Handle search action
+     */
+    function handleSoftDeleted() {
+        setShowDeletedState(showDeletedState = !showDeletedState);
+        loadDataHandler();
+    }
+
+    /**
+     * Handle search action
+     * @param event
+     */
+    function handleSearch(event: MouseEvent<HTMLElement>) {
+        event.preventDefault();
+        loadDataHandler();
+    }
+
 
     return (
         <>
             <div className="flex items-center my-6">
-                <div className="w-1/2">
+                <div className="w-1/2 space-x-2">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={addCustomerHandler}>
+                            onClick={handleAddCustomer}>
                         Add entry
+                    </button>
+
+                    <button
+                        className={`${showDeletedState ? 'bg-red-600 hover:bg-red-800' : 'bg-green-600 hover:bg-green-800'} text-white font-bold py-2 px-4 rounded`}
+                        onClick={handleSoftDeleted}>
+                        {showDeletedState ? 'Hide' : 'Show'} Deleted
                     </button>
                 </div>
 

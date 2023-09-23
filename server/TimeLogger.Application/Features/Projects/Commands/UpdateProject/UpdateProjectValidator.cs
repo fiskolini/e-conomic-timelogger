@@ -9,9 +9,7 @@ namespace TimeLogger.Application.Features.Projects.Commands.UpdateProject
         public UpdateProjectValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50)
+                .ValidCommonName()
                 .When(x => x.Name != null);
 
             RuleFor(x => x.Deadline)
