@@ -6,7 +6,6 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Internal;
 using TimeLogger.Application.Common.Exceptions;
 
 namespace TimeLogger.Api.Extensions

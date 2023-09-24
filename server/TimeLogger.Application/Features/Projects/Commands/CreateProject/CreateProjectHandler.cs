@@ -8,7 +8,7 @@ using TimeLogger.Domain.Repositories.Common;
 
 namespace TimeLogger.Application.Features.Projects.Commands.CreateProject
 {
-    public class CreateProjectHandler : IRequestHandler<ProjectRequest<CreateProjectResponse>, CreateProjectResponse>
+    public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, CreateProjectResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProjectRepository _projectRepository;
@@ -24,7 +24,7 @@ namespace TimeLogger.Application.Features.Projects.Commands.CreateProject
         /// <summary>
         /// Handles project creation operation
         /// </summary>
-        public async Task<CreateProjectResponse> Handle(ProjectRequest<CreateProjectResponse> request,
+        public async Task<CreateProjectResponse> Handle(CreateProjectCommand request,
             CancellationToken cancellationToken)
         {
             var project = _mapper.Map<Project>(request);

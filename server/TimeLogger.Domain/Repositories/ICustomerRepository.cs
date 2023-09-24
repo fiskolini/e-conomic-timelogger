@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeLogger.Domain.Entities;
@@ -15,16 +14,6 @@ namespace TimeLogger.Domain.Repositories
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="considerDeleted">Consider entities soft deleted</param>
         public Task<int> GetProjectsCount(int customerId, CancellationToken cancellationToken,
-            bool considerDeleted = false);
-
-        /// <summary>
-        /// Get project counts for given customer ids
-        /// </summary>
-        /// <param name="customerIds">Customers needle</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <param name="considerDeleted">Consider entities soft deleted</param>
-        /// <returns></returns>
-        public Task<Dictionary<int, int>> GetProjectsCounts(List<int> customerIds, CancellationToken cancellationToken,
             bool considerDeleted = false);
     }
 }

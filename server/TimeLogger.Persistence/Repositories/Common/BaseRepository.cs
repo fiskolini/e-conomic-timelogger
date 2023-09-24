@@ -127,5 +127,16 @@ namespace TimeLogger.Persistence.Repositories.Common
 
             Context.Update(entity);
         }
+
+        /// <summary>
+        /// Count all results
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="considerDeleted">Consider entities soft deleted</param>
+        public Task<int> Count(bool considerDeleted, CancellationToken cancellationToken)
+        {
+            var query = GetQuery(considerDeleted);
+            return query.CountAsync(cancellationToken);
+        }
     }
 }

@@ -3,6 +3,7 @@ import {AxiosResponse} from "axios";
 import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {Customer} from "@/app/types/entities/Customer";
 import {ApiPagedRequest} from "@/app/types/api/request/ApiPagedRequest";
+import {mapPagedRequest} from "@/app/libs/PagedRequestmapper";
 
 /**
  * Create a new customer given customer
@@ -17,30 +18,24 @@ export function createCustomer(name: string): Promise<AxiosResponse<ApiPagedResp
  * @param r
  */
 export function getAllCustomers(r: ApiPagedRequest): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
-    let params: ApiPagedRequest = {};
-
-    if (r.pageNumber !== null) {
-        params.pageNumber = r.pageNumber
-    }
-
-    if (r.search !== null) {
-        params.search = r.search;
-    }
-
-    if (r.considerDeleted !== null) {
-        params.considerDeleted = r.considerDeleted;
-    }
-    
+    let params: ApiPagedRequest = mapPagedRequest(r);
     return apiClient.get<ApiPagedResponse<Customer>>('/api/customers', {params});
 }
 
 /**
- * Update given customer
+ * Load customer
  * @param id
+ */
+export function getCustomerById(id: number): Promise<AxiosResponse<Customer>> {
+    return apiClient.get<Customer>(`/api/customers/${id}`);
+}
+
+/**
+ * Update given customer
  * @param data
  */
-export function updateCustomer(id: number, data: Customer): Promise<AxiosResponse<ApiPagedResponse<Customer>>> {
-    return apiClient.patch<ApiPagedResponse<Customer>>(`/api/customers/${id}`, data);
+export function updateCustomer(data: Customer): Promise<AxiosResponse<Customer>> {
+    return apiClient.patch<Customer>(`/api/customers/${data.id}`, data);
 }
 
 /**

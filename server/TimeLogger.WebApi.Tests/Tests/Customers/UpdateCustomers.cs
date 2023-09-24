@@ -30,11 +30,12 @@ namespace TimeLogger.Api.Tests.Tests.Customers
             // Act
             var response = await _httpClient.PatchAsJsonAsync($"api/customers/{customerRequest.Id}", customerRequest,
                 cancellationToken);
-            var returnedJson = await response.Content.ReadAsStringAsync();
+            var responseAfterUpdate = await _httpClient.GetAsync($"api/customers/{customerRequest.Id}", cancellationToken);
+            var returnedJson = await responseAfterUpdate.Content.ReadAsStringAsync();
             var updatedCustomer = JsonConvert.DeserializeObject<UpdateCustomerResponse>(returnedJson);
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             Assert.Equal(customerRequest.Name, updatedCustomer.Name);
             Assert.NotNull(updatedCustomer.DateUpdated);
         }

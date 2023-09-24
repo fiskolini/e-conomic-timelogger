@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TimeLogger.Application.Features.Projects;
 using TimeLogger.Application.Features.Projects.Commands.CreateProject;
 using TimeLogger.Application.Features.Projects.Commands.DeleteProject;
 using TimeLogger.Application.Features.Projects.Commands.UpdateProject;
@@ -25,7 +24,7 @@ namespace TimeLogger.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedResults<GetProjectResponse>>> GetAll(GetProjectCommand pagedCommand,
+        public async Task<ActionResult<PagedResults<GetProjectsResponse>>> GetAll(GetProjectsCommand pagedCommand,
             CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(pagedCommand, cancellationToken);
@@ -35,9 +34,13 @@ namespace TimeLogger.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PagedResults<GetProjectResponse>>> GetSingle(GetSingleProjectCommand project,
+        public async Task<ActionResult<GetSingleProjectResponse>> GetSingle(
+            int id,
+            GetSingleProjectCommand project,
             CancellationToken cancellationToken)
         {
+            project.Id = id;
+
             var response = await _mediator.Send(project, cancellationToken);
             return Ok(response);
         }
@@ -46,17 +49,17 @@ namespace TimeLogger.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateProjectResponse>> Create(
-            [FromBody] ProjectRequest<CreateProjectResponse> request,
+            [FromBody] CreateProjectCommand request,
             CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
-            return Ok(response);
+            return CreatedAtAction(nameof(GetSingle), new { id = response.Id }, response);
         }
 
         [HttpPatch("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PagedResults<GetProjectResponse>>> Update(
+        public async Task<ActionResult<UpdateProjectResponse>> Update(
             int id,
             [FromBody] UpdateProjectCommand command,
             CancellationToken cancellationToken)
@@ -67,11 +70,10 @@ namespace TimeLogger.Api.Controllers
             return NoContent();
         }
 
-        // DELETE /api/projects/{id}
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectResponse>> Delete(DeleteProjectCommand command,
+        public async Task<ActionResult<DeleteProjectResponse>> Delete(DeleteProjectCommand command,
             CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);

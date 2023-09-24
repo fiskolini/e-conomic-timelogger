@@ -7,7 +7,8 @@ namespace TimeLogger.Application.Features.Projects.Queries.GetById
     {
         public GetSingleProjectMapper()
         {
-            CreateMap<Project, GetSingleProjectCommand>();
+            CreateMap<GetSingleProjectCommand, Project>();
+            CreateMap<Project, GetSingleProjectResponse>();
         }
     }
 }

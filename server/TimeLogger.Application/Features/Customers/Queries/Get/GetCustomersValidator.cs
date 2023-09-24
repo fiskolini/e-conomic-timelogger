@@ -1,4 +1,5 @@
 using FluentValidation;
+using TimeLogger.Application.Common.Validators;
 
 namespace TimeLogger.Application.Features.Customers.Queries.Get
 {
@@ -7,7 +8,7 @@ namespace TimeLogger.Application.Features.Customers.Queries.Get
         public GetCustomersValidator()
         {
             RuleFor(x => x.PageSize)
-                .LessThanOrEqualTo(500); // well... we have to limit something...
+                .ValidItemsLimit();
         }
     }
 }

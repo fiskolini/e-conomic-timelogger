@@ -1,26 +1,24 @@
-import {Project} from "@/app/models/Project";
+import {Project} from "@/app/types/entities/Project";
 
 
 export default function StatusLabel({project}: { project: Project }) {
-    let text = '';
-    let bg = '';
-    let color = '';
+    let text = 'Completed';
+    let bg = 'bg-green-100';
+    let color = 'text-green-800';
+    const now = new Date();
 
-    if (
-        (project.completedAt !== null && new Date(project.completedAt) < new Date())
-        || project.completedAt === null && project.deadline !== null && new Date(project.deadline || '') < new Date()
-    ) {
-        text = 'Delayed';
-        bg = 'bg-red-100';
-        color = 'text-red-800';
-    } else if (project.deadline === null) {
-        text = 'Ongoing';
-        bg = 'bg-gray-200';
-        color = 'text-gray-800';
+    if (!project.completedAt) {
+        if (project.deadline && new Date(project.deadline) < now) {
+            text = 'Delayed';
+            bg = 'bg-red-100';
+            color = 'text-red-800';
+        } else if (!project.deadline || new Date(project.deadline) > now) {
+            text = 'Ongoing';
+            bg = 'bg-gray-200';
+            color = 'text-gray-800';
+        }
     } else {
-        text = 'Complete';
-        bg = 'bg-green-100';
-        color = 'text-green-800';
+        text += ` at ${new Date(project.completedAt).toLocaleDateString()}`;
     }
 
     return (

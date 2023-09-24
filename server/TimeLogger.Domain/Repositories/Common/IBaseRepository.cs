@@ -49,5 +49,12 @@ namespace TimeLogger.Domain.Repositories.Common
         /// </summary>
         /// <param name="entity">Entity to Soft Delete</param>
         void SoftDelete(T entity);
+
+        /// <summary>
+        /// Count all results
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="considerDeleted">Consider entities soft deleted</param>
+        Task<int> Count(bool considerDeleted, CancellationToken cancellationToken);
     }
 }

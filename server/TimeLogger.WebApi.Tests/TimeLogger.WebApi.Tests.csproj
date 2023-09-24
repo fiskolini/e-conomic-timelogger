@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TimeLogger.WebApi\TimeLogger.WebApi.csproj" />
 
+
   </ItemGroup>
 
 

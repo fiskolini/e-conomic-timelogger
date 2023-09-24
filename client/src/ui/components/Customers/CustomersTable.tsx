@@ -5,6 +5,7 @@ import {Customer} from "@/app/types/entities/Customer";
 import Pagination from "@/ui/components/Pagination";
 import {NumberedArgumentFunction} from "@/app/types/handers/NumberedArgumentFunction";
 import TableHeader from "@/ui/components/TableHeader";
+import isUndefined from "lodash/isUndefined";
 
 
 export default function CustomersTable({data, loading, loadData, currentPage}: {
@@ -23,7 +24,7 @@ export default function CustomersTable({data, loading, loadData, currentPage}: {
                 <TableHeader items={tableHeader}/>
                 
                 <tbody className='text-gray-500'>
-                {typeof data === "undefined" &&
+                {isUndefined(data) &&
                     // Skeleton while loading in the background
                     Object.keys(Array.from(Array(3))).map(function (ri) {
                         return (
@@ -69,7 +70,7 @@ export default function CustomersTable({data, loading, loadData, currentPage}: {
                 }
                 </tbody>
             </table>
-            {typeof data !== "undefined" &&
+            {!isUndefined(data) && 
                 <Pagination data={data} loading={loading} loadHandler={loadData} currentPage={currentPage}/>
             }
         </>

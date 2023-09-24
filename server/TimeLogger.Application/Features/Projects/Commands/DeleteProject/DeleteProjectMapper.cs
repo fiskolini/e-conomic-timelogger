@@ -1,4 +1,5 @@
 using AutoMapper;
+using TimeLogger.Application.Features.Projects.Commands.CreateProject;
 using TimeLogger.Domain.Entities;
 
 namespace TimeLogger.Application.Features.Projects.Commands.DeleteProject
@@ -7,8 +8,8 @@ namespace TimeLogger.Application.Features.Projects.Commands.DeleteProject
     {
         public DeleteProjectMapper()
         {
-            CreateMap<DeleteProjectCommand, DeleteProjectCommand>();
-            CreateMap<Project, ProjectResponse>();
+            CreateMap<DeleteProjectCommand, Project>();
+            CreateMap<Project, DeleteProjectResponse>();
         }
     }
 }

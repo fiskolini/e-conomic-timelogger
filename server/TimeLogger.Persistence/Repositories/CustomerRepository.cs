@@ -27,25 +27,12 @@ namespace TimeLogger.Persistence.Repositories
             return query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Dictionary<int, int>> GetProjectsCounts(List<int> customerIds,
-            CancellationToken cancellationToken, bool considerDeleted = false)
-        {
-            var query = GetQuery(considerDeleted)
-                .Where(x => customerIds.Contains(x.Id))
-                .Select(x => new { count = x.Projects.Count, id = x.Id })
-                .ToDictionary(k => k.id, i => i.count);
 
-            return query;
-        }
-
-        public async Task<PagedResults<Customer>> GetAll(PagedRequest request, CancellationToken cancellationToken,
+        public new async Task<PagedResults<Customer>> GetAll(PagedRequest request, CancellationToken cancellationToken,
             bool considerDeleted = false)
         {
-            var query = GetQuery(considerDeleted);
-            if (request.Search != null)
-            {
-                query = query.Where(x => x.Name.Contains(request.Search) || x.Id.ToString() == request.Search);
-            }
+            var query = GetQuery(considerDeleted)
+                .WhereNameContains(request.Search);
 
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query

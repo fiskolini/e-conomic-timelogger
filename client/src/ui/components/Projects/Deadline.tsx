@@ -1,7 +1,8 @@
 import {ReactNode} from "react";
+import isUndefined from "lodash/isUndefined";
 
 export default function Deadline({children}: { children: string | ReactNode }) {
-    if (children === null || typeof children === "undefined") {
+    if (children === null || isUndefined(children)) {
         return 'N/A';
     }
 

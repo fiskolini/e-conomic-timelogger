@@ -2,7 +2,6 @@ import BackArrowIcon from "@/ui/icons/backArrow";
 import Link from "next/link";
 
 export default function NotFound() {
-
     return (
         <div className="w-full px-16 md:px-0 h-screen flex items-center justify-center">
             <div

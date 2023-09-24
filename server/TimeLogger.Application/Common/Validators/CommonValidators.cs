@@ -16,5 +16,15 @@ namespace TimeLogger.Application.Common.Validators
                 .MinimumLength(3)
                 .MaximumLength(50);
         }
+
+        /// <summary>
+        /// Validate the given items limit withing the range (< 500)
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IRuleBuilderOptions<T, int> ValidItemsLimit<T>(this IRuleBuilder<T, int> ruleBuilder)
+        {
+            return ruleBuilder
+                .LessThanOrEqualTo(500); // well... we have to limit something...
+        }
     }
 }

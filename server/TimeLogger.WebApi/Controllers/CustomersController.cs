@@ -62,10 +62,9 @@ namespace TimeLogger.Api.Controllers
         {
             command.Id = id;
 
-            var response = await _mediator.Send(command, cancellationToken);
-            return Ok(response);
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
         }
-
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

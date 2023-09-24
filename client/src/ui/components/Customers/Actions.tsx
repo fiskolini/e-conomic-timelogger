@@ -29,7 +29,7 @@ export default function Actions({customer, handleRefresh, loading}: {
     }
 
     /**
-     * Delete project handler
+     * Update customer handler
      */
     function handleUpdate(value: MouseEvent<SVGSVGElement> | string | null = null) {
         if (loading) return;
@@ -37,13 +37,13 @@ export default function Actions({customer, handleRefresh, loading}: {
         const newName = prompt(
             `Rename the '${customer.name}' customer`, typeof value === "string" && value.length > 0 ? value : customer.name
         );
-
+        
         if (newName === null || newName === customer.name) {
             return;
         }
 
         if (newName.length < 3) {
-            alert("The project 'Name' must be at least 3 characters");
+            alert("The customer 'Name' must be at least 3 characters");
             handleUpdate(newName);
             return;
         }
@@ -53,7 +53,7 @@ export default function Actions({customer, handleRefresh, loading}: {
             name: newName
         }
 
-        updateCustomer(customer.id, data).then(() => {
+        updateCustomer(data).then(() => {
             handleRefresh.call({})
             toast.success("Customer renamed successfully!");
         });
@@ -66,7 +66,7 @@ export default function Actions({customer, handleRefresh, loading}: {
                 <EditIcon onClick={handleUpdate}/>
             </button>
 
-            <Link className="cursor-pointer text-gray-400 hover:text-green-600" href={`customers/${customer.id}`}>
+            <Link className="cursor-pointer text-gray-400 hover:text-green-600" href={`projects/${customer.id}`}>
                 <EyeIcon/>
             </Link>
 

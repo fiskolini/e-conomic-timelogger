@@ -9,3 +9,16 @@ export const parseTime = (m: number): { hours: number, minutes: number } => {
     return {hours, minutes};
 }
 
+/**
+ * Validates if given date is valid date
+ * @param d
+ */
+export const isValidFutureDate = (d: string) => {
+    const parsedDate = new Date(d);
+    
+    return (
+        !isNaN(parsedDate.getTime()) &&
+        d.trim() !== '' &&
+        parsedDate > new Date()
+    )
+}

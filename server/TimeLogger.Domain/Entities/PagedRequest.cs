@@ -1,6 +1,6 @@
 namespace TimeLogger.Domain.Entities
 {
-    public class PagedRequest : SoftDeleted
+    public class PagedRequest
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

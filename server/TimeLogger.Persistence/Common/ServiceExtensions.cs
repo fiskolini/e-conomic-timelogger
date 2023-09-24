@@ -27,6 +27,7 @@ namespace TimeLogger.Persistence.Common
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITimeRepository, TimeRepository>();
         }
 
         public static void UsePersistence(this IApplicationBuilder app)

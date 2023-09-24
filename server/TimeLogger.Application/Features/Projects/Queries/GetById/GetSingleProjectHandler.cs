@@ -7,7 +7,7 @@ using TimeLogger.Domain.Repositories;
 
 namespace TimeLogger.Application.Features.Projects.Queries.GetById
 {
-    public class GetSingleProjectHandler : IRequestHandler<GetSingleProjectCommand, ProjectResponse>
+    public class GetSingleProjectHandler : IRequestHandler<GetSingleProjectCommand, GetSingleProjectResponse>
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
@@ -18,17 +18,17 @@ namespace TimeLogger.Application.Features.Projects.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<ProjectResponse> Handle(GetSingleProjectCommand command,
+        public async Task<GetSingleProjectResponse> Handle(GetSingleProjectCommand command,
             CancellationToken cancellationToken)
         {
-            var project = await _projectRepository.GetSingle(command.Id, cancellationToken, command.ConsiderDeleted);
+            var project = await _projectRepository.GetSingle(command.CustomerId, command.Id, cancellationToken, command.ConsiderDeleted);
 
             if (project == null)
             {
                 throw new ItemNotFoundException(command.Id);
             }
 
-            return _mapper.Map<ProjectResponse>(project);
+            return _mapper.Map<GetSingleProjectResponse>(project);
         }
     }
 }

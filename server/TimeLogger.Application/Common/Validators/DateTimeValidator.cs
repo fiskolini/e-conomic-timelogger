@@ -5,15 +5,27 @@ namespace TimeLogger.Application.Common.Validators
 {
     public static class DateTimeValidator
     {
+        /// <summary>
+        /// Validate given date and try to parse with valid one
+        /// </summary>
         public static IRuleBuilderOptions<T, string> MustContainValidDate<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder.Must(x => x != null && DateTime.TryParse(x.ToString(), out _));
         }
-        
-        public static IRuleBuilderOptions<T, string> MustContainFutureDate<T>(this IRuleBuilder<T, string> ruleBuilder)
+
+        /// <summary>
+        /// Validate future date
+        /// </summary>
+        public static IRuleBuilderOptions<T, string> CanContainValidFutureDate<T>(
+            this IRuleBuilder<T, string> ruleBuilder, bool mandatory = false)
         {
             return ruleBuilder.Must(x =>
             {
+                if (!mandatory && x == null)
+                {
+                    return true;
+                }
+
                 if (!DateTime.TryParse(x, out DateTime date)) return false;
                 return date > DateTime.Now;
             });

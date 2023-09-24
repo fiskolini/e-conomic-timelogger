@@ -28,7 +28,7 @@ namespace TimeLogger.Api.Tests.Tests.Customers
             var cancellationToken = new CancellationToken();
             var customerRequest = new GetSingleCustomerCommand { Id = 2 };
 
-            // Set up the mediator to return a specific result when Send is called
+            // Set up the expected result being returned
             var expectedResponse = new GetSingleCustomerResponse { Id = customerRequest.Id };
 
             // Act
@@ -51,7 +51,7 @@ namespace TimeLogger.Api.Tests.Tests.Customers
             var cancellationToken = new CancellationToken();
             var request = new GetCustomersCommand { PageSize = 2, PageNumber = 2 };
 
-            // Set up the mediator to return a specific result when Send is called
+            // Set up the expected result being returned
             var expectedResponse = new PagedResults<GetCustomersResponse>
             {
                 PageSize = request.PageSize,

@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using TimeLogger.Domain.Common;
+using TimeLogger.Domain.Contracts;
 using TimeLogger.Domain.Entities;
 
 namespace TimeLogger.Persistence.Common.Extensions
@@ -36,6 +38,24 @@ namespace TimeLogger.Persistence.Common.Extensions
         {
             var skipCount = (request.PageNumber - 1) * request.PageSize;
             return query.Skip(skipCount).Take(request.PageSize);
+        }
+
+        /// <summary>
+        /// Plug search by named results
+        /// </summary>
+        public static IQueryable<T> WhereNameContains<T>(this IQueryable<T> query, string needle)
+            where T : INamedEntity, IIdentifiableEntity
+        {
+            if (needle == null)
+            {
+                return query;
+            }
+
+            var unifiedNeedle = needle.ToLower();
+
+            return query.Where(
+                x => x.Name.ToLower().Contains(unifiedNeedle) || x.Id.ToString().ToLower().Contains(unifiedNeedle)
+            );
         }
     }
 }

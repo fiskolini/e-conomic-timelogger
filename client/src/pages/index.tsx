@@ -9,12 +9,13 @@ import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {Customer} from "@/app/types/entities/Customer";
 import {ApiErrorResponse} from "@/app/types/api/response/ApiErrorResponse";
 import {ApiPagedRequest} from "@/app/types/api/request/ApiPagedRequest";
+import PageHeader from "@/ui/components/PageHeader";
 
 
-const Table = dynamic(
+const CustomersTable = dynamic(
     () => import('@/ui/components/Customers/CustomersTable').then(m => m.default));
 
-export default function Home() {
+export default function CustomersPage() {
     let [showDeletedState, setShowDeletedState] = useState<boolean>(false);
     let [searchState, setSearchState] = useState<string>('');
     let [dataState, setDataState] = useState<ApiPagedResponse<Customer>>();
@@ -81,12 +82,17 @@ export default function Home() {
      */
     function handleSearch(event: MouseEvent<HTMLElement>) {
         event.preventDefault();
-        loadDataHandler();
+        
+        // At this stage, we must reset page state
+        // as someone could trigger the search functionality
+        // having 'currentPageState' > 1
+        loadDataHandler(1);
     }
 
 
     return (
         <>
+            <PageHeader data={dataState} title='Customers'/>
             <div className="flex items-center my-6">
                 <div className="w-1/2 space-x-2">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -120,7 +126,8 @@ export default function Home() {
                 </div>
             </div>
 
-            <Table data={dataState} currentPage={currentPageState} loading={loadingState} loadData={loadDataHandler}/>
+            <CustomersTable data={dataState} currentPage={currentPageState} loading={loadingState}
+                            loadData={loadDataHandler}/>
         </>
     );
 }

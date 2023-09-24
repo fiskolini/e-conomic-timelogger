@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TimeLogger.Api.Extensions;
 using TimeLogger.Application.Common.Behaviors;
-using TimeLogger.Persistence;
 using TimeLogger.Persistence.Common;
 
 namespace TimeLogger.Api

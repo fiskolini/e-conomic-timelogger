@@ -15,9 +15,7 @@ namespace TimeLogger.Api.Tests.TestFixtures
             var hostBuilder = new WebHostBuilder()
                 .UseEnvironment("Testing")
                 .UseStartup<Startup>();
-            /*Program.CreateHostBuilder(Array.Empty<string>())
-                .ConfigureWebHost(webHostBuilder => { webHostBuilder.UseTestServer(); });
-*/
+            
             _server = new TestServer(hostBuilder);
             Client = _server.CreateClient();
         }
