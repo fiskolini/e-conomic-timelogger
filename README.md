@@ -3,7 +3,6 @@
 </p>
 
 
-
 This is a simple time logger web application developed as part of the recruitment process for **e-conomic**. The
 application is designed to address the following user stories:
 
@@ -20,8 +19,6 @@ application is designed to address the following user stories:
 ### Technologies Used
 
 - .NET Core v3.1
-- Clean Architecture
-- CQRS (Command Query Responsibility Segregation)
 - OpenAPI (Swagger) - can be found in `localhost:3001/docs`
 
 ### Design Decisions
@@ -49,6 +46,8 @@ application is designed to address the following user stories:
    the [TimeLogger.WebApi.Tests](/server/TimeLogger.WebApi.Tests) project
 3. A few Unit Tests from the Application can be found in
    the [TimeLogger.Application.Tests](/server/TimeLogger.Application.Tests) project
+
+---
 
 ## Frontend (FE)
 
@@ -107,7 +106,7 @@ GET /api/customers?pageNumber=1
 Search is also implemented while loading a _list or resources_ through `search` get param.
 
 ```url
-/api/customers?searchfoo
+/api/customers?search=foo
 ```
 
 ```url
