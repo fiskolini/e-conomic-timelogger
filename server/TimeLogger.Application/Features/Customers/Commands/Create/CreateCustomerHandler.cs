@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,11 +25,18 @@ namespace TimeLogger.Application.Features.Customers.Commands.Create
         public async Task<CreateCustomerResponse> Handle(CreateCustomerCommand command,
             CancellationToken cancellationToken)
         {
+            // Map the data from the CreateCustomerCommand to a Customer entity
             var customer = _mapper.Map<Customer>(command);
+
+            // Create the customer entity in the repository
             _repository.Create(customer);
+
             await _unitOfWork.Commit(cancellationToken);
 
-            return _mapper.Map<CreateCustomerResponse>(customer);
+            // Map the created customer entity to a CreateCustomerResponse object
+            var response = _mapper.Map<CreateCustomerResponse>(customer);
+
+            return response;
         }
     }
 }

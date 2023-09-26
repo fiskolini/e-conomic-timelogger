@@ -8,7 +8,7 @@ namespace TimeLogger.Application.Features.Customers.Queries.Get
         public GetCustomersValidator()
         {
             RuleFor(x => x.PageSize)
-                .ValidItemsLimit();
+                .LessThanOrEqualTo500();
         }
     }
 }

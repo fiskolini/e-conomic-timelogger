@@ -1,10 +1,9 @@
-import dynamic from "next/dynamic";
 import {MouseEvent, useEffect, useState} from "react";
+import dynamic from "next/dynamic";
 import {AxiosResponse} from "axios";
 import toast from "react-hot-toast";
 
 import {createCustomer, getAllCustomers} from "@/app/api/customers";
-
 import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {Customer} from "@/app/types/entities/Customer";
 import {ApiErrorResponse} from "@/app/types/api/response/ApiErrorResponse";

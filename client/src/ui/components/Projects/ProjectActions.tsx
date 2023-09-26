@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import {isEmpty, isNull} from "lodash";
 import Link from "next/link";
 
-export default function Actions({project, handleRefresh, loading}: {
+export default function ProjectActions({project, handleRefresh, loading}: {
     project: Project,
     handleRefresh: Function,
     loading: boolean
@@ -55,8 +55,6 @@ export default function Actions({project, handleRefresh, loading}: {
         } else {
             data.deadline = null;
         }
-
-        console.log(data);
 
 
         if (data.name === project.name && newDeadline === project.deadline) {
@@ -107,14 +105,15 @@ export default function Actions({project, handleRefresh, loading}: {
 
     return (
         <div className='flex justify-around'>
-            <button className="cursor-pointer text-gray-400 hover:text-blue-400"
+            <button className={`${isNull(project.completedAt) ? 'cursor-pointer text-gray-400 hover:text-blue-400' : 'cursor-not-allowed text-gray-200'}`}
                     onClick={handleUpdate}
+                    disabled={!isNull(project.completedAt)}
             >
                 <EditIcon/>
             </button>
 
             <button
-                className={`${isNull(project.completedAt) ? 'cursor-pointer hover:text-green-600 text-gray-400' : 'cursor-not-allowed text-gray-200'} `}
+                className={`${isNull(project.completedAt) ? 'cursor-pointer hover:text-green-600 text-gray-400' : 'cursor-not-allowed text-gray-200'}`}
                 disabled={!isNull(project.completedAt)}
                 onClick={handleComplete}
             >

@@ -115,7 +115,7 @@ namespace TimeLogger.Api.Tests.Tests.Customers
             var response = await _httpClient.GetAsync($"api/customers/{customerRequest.Id}", cancellationToken);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
     }
 }

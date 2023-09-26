@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using TimeLogger.Application.Common.Exceptions.Common;
 using TimeLogger.Domain.Repositories;
 
 namespace TimeLogger.Application.Features.Times.Queries.GetById
@@ -21,15 +20,12 @@ namespace TimeLogger.Application.Features.Times.Queries.GetById
         public async Task<GetSingleTimeResponse> Handle(GetSingleTimeCommand command,
             CancellationToken cancellationToken)
         {
-            // TODO validate given project id
+            // Retrieve the time entity by ID
             var time = await _repository.GetSingle(command.Id, cancellationToken, command.ConsiderDeleted);
 
-            if (time == null)
-            {
-                throw new ItemNotFoundException(command.Id);
-            }
-
+            // Map the time entity to the response object
             var response = _mapper.Map<GetSingleTimeResponse>(time);
+
             return response;
         }
     }

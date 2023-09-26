@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TimeLogger.Application.Common.Exceptions.Common;
+using TimeLogger.Domain.Entities;
 using TimeLogger.Domain.Repositories;
 using TimeLogger.Domain.Repositories.Common;
 
@@ -24,21 +25,29 @@ namespace TimeLogger.Application.Features.Times.Commands.Update
         public async Task<UpdateTimeResponse> Handle(UpdateTimeCommand command,
             CancellationToken cancellationToken)
         {
-            // TODO filter project id
+            // Retrieve the time entity by ID
             var entityToUpdate = await _repository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToUpdate is { DateDeleted: null }))
-            {
+            // Throw an exception if the time entity is not found
+            if (entityToUpdate == null)
                 throw new ItemNotFoundException(command.Id);
-            }
 
-            _mapper.Map(command, entityToUpdate);
+            UpdateEntity(ref entityToUpdate, command);
 
+            // Update the entity in the repository
             _repository.Update(entityToUpdate);
 
             await _unitOfWork.Commit(cancellationToken);
 
             return _mapper.Map<UpdateTimeResponse>(entityToUpdate);
+        }
+
+        /// <summary>
+        /// Partially update entity with the given Project Request
+        /// </summary>
+        private static void UpdateEntity(ref Time entityToUpdate, UpdateTimeCommand command)
+        {
+            entityToUpdate.Minutes = command.Minutes;
         }
     }
 }

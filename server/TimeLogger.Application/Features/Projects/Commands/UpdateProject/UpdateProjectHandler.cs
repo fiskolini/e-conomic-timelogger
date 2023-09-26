@@ -27,24 +27,28 @@ namespace TimeLogger.Application.Features.Projects.Commands.UpdateProject
         public async Task<UpdateProjectResponse> Handle(UpdateProjectCommand command,
             CancellationToken cancellationToken)
         {
-            var entityToUpdate = await _projectRepository.GetSingle(command.Id, cancellationToken);
+            // Get the project to be updated by its id
+            var project = await _projectRepository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToUpdate is { DateDeleted: null }))
-            {
+            // Check if the project exists
+            if (project == null)
                 throw new ItemNotFoundException(command.Id);
-            }
 
-            UpdateEntity(ref entityToUpdate, command);
+            // Update the entity based on the command
+            UpdateEntity(ref project, command);
 
-            _projectRepository.Update(entityToUpdate);
+            // Update the project in the repository
+            _projectRepository.Update(project);
 
+            // Commit change
             await _unitOfWork.Commit(cancellationToken);
 
-            return _mapper.Map<UpdateProjectResponse>(entityToUpdate);
+            // Map the updated project to UpdateProjectResponse and return it
+            return _mapper.Map<UpdateProjectResponse>(project);
         }
 
         /// <summary>
-        /// Partially pdate entity with given Project Request
+        /// Partially update entity with the given Project Request
         /// </summary>
         private static void UpdateEntity(ref Project entityToUpdate, UpdateProjectCommand command)
         {
@@ -59,26 +63,23 @@ namespace TimeLogger.Application.Features.Projects.Commands.UpdateProject
                 if (entityToUpdate.CompletedAt.HasValue)
                 {
                     throw new BadRequestException(
-                        $"Project has been already marked as complete at '{entityToUpdate.CompletedAt}'"
+                        $"Project has already been marked as complete at '{entityToUpdate.CompletedAt}'"
                     );
                 }
 
                 entityToUpdate.CompletedAt = DateTimeOffset.Parse(command.CompletedAt);
             }
 
-            if (command.Deadline != null)
+            if (string.IsNullOrEmpty(command.Deadline)) return;
+            
+            // If the user is trying to update, then we have to set its value
+            if (entityToUpdate.Deadline == null)
             {
                 entityToUpdate.Deadline = DateTime.Parse(command.Deadline);
             }
             else
             {
-                entityToUpdate.Deadline = (DateTime?)null;
-            }
-
-
-            if (command.TimeAllocated != null)
-            {
-                entityToUpdate.TimeAllocated = (int)command.TimeAllocated;
+                entityToUpdate.Deadline = null;
             }
         }
     }

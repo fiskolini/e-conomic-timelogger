@@ -4,8 +4,7 @@ namespace TimeLogger.Application.Features.Times.Queries.Get
 {
     public class GetTimesResponse : BaseEntityResponse
     {
-        public string Name { get; set; }
-        public int NumberOfProjects { get; set; }
-        public int TotalTimeAllocated { get; set; }
+        public int ProjectId { get; set; }
+        public int Minutes { get; set; }
     }
 }

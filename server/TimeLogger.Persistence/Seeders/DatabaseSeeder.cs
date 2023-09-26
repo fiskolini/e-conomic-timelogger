@@ -23,6 +23,7 @@ namespace TimeLogger.Persistence.Seeders
         public void Seed()
         {
             using var context = _scope.ServiceProvider.GetService<DataContext>();
+            var timesRepository = _scope.ServiceProvider.GetService<ITimeRepository>();
             var customerRepository = _scope.ServiceProvider.GetService<ICustomerRepository>();
             var projectRepository = _scope.ServiceProvider.GetService<IProjectRepository>();
             var customerFaker = new Faker();
@@ -38,6 +39,7 @@ namespace TimeLogger.Persistence.Seeders
             for (var i = 1; i <= 15; i++)
             {
                 var projects = new List<Project>();
+                var times = new List<Time>();
                 var customer = new Customer
                 {
                     Name = customerFaker.Company.CompanyName()
@@ -46,16 +48,15 @@ namespace TimeLogger.Persistence.Seeders
                 // Attach random picked customer
                 customers.Add(customer);
 
-
                 // You gotta think "why is this Random().Next(10) + 5 needed for"?
                 // Well... I want to seed DB with as much as items possible having count > 10,
                 // as I really want to try the app with paginated results... But not on all them :)
                 for (var p = 1; p <= new Random().Next(10) + 5; p++)
                 {
                     var projectFaker = new Faker();
-                    int[] times = { 0, 30, 35, 50, 120, 200, 300, 5000 };
+                    int[] randomTimes = { 0, 30, 35, 50, 120, 200, 300, 5000 };
                     var random = new Random();
-                    var arrayLength = times.Length;
+                    var arrayLength = randomTimes.Length;
                     var randomIndex = random.Next(arrayLength);
                     DateTime? deadline = null;
                     DateTime? completed = null;
@@ -73,17 +74,23 @@ namespace TimeLogger.Persistence.Seeders
                         // Just set a few as "delayed"
                         completed = DateTime.Today;
                     }
+                    
+                    var time = new Time
+                    {
+                        Minutes = randomTimes[randomIndex]
+                    };
+                    
 
                     // Create random project
                     var project = new Project
                     {
                         Name = $"{projectFaker.Person.FirstName} {projectFaker.Person.LastName}",
                         Deadline = deadline,
-                        TimeAllocated = times[randomIndex],
-                        CompletedAt = completed
+                        CompletedAt = completed,
+                        Times = new List<Time>()
                     };
-
-                    // Attach projects to the client
+                    
+                    project.Times.Add(time);
                     projects.Add(project);
                 }
 

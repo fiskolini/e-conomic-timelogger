@@ -32,11 +32,12 @@ namespace TimeLogger.Persistence.Repositories
             bool considerDeleted = false)
         {
             var query = GetQuery(considerDeleted)
-                .WhereNameContains(request.Search);
+                .WhereContainsNameOrId(request.Search);
 
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query
                 .WithPagedResults(request)
+                .ApplySort(request.OrderBy)
                 .ToListAsync(cancellationToken);
 
             return new PagedResults<Customer>

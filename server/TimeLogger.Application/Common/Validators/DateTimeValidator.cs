@@ -27,7 +27,10 @@ namespace TimeLogger.Application.Common.Validators
                 }
 
                 if (!DateTime.TryParse(x, out DateTime date)) return false;
-                return date > DateTime.Now;
+
+                var today = DateTime.Now;
+                
+                return date >= today;
             });
         }
     }

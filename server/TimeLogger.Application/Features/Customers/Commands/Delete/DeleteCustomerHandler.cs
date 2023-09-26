@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TimeLogger.Application.Common.Exceptions.Common;
-using TimeLogger.Application.Features.Customers.Commands.Create;
-using TimeLogger.Domain.Entities;
 using TimeLogger.Domain.Repositories;
 using TimeLogger.Domain.Repositories.Common;
 
@@ -26,17 +24,23 @@ namespace TimeLogger.Application.Features.Customers.Commands.Delete
         public async Task<DeleteCustomerResponse> Handle(DeleteCustomerCommand command,
             CancellationToken cancellationToken)
         {
+            // Retrieve the customer entity to be deleted based on the provided customer ID
             var entityToDelete = await _repository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToDelete is { DateDeleted: null }))
-            {
+            // If no customer entity is found, throw an ItemNotFoundException
+            if (entityToDelete == null)
                 throw new ItemNotFoundException(command.Id);
-            }
-            
+
+            // Soft delete the customer entity using the repository
             _repository.SoftDelete(entityToDelete);
+
+            // Commit the unit of work to save the changes made during the soft delete
             await _unitOfWork.Commit(cancellationToken);
 
-            return _mapper.Map<DeleteCustomerResponse>(entityToDelete);
+            // Map the deleted customer entity to a DeleteCustomerResponse object
+            var response = _mapper.Map<DeleteCustomerResponse>(entityToDelete);
+
+            return response;
         }
     }
 }

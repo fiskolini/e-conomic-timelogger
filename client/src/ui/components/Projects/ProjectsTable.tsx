@@ -2,10 +2,10 @@ import isUndefined from "lodash/isUndefined";
 
 import Spinner from "@/ui/icons/spinner";
 import {Project} from "@/app/types/entities/Project";
-import TimeAllocated from "@/ui/components/Projects/TimeAllocated";
+import TimeAllocated from "@/ui/components/TimeAllocated";
 import StatusLabel from "@/ui/components/Projects/StatusLabel";
 import Deadline from "@/ui/components/Projects/Deadline";
-import Actions from "@/ui/components/Projects/Actions";
+import ProjectActions from "@/ui/components/Projects/ProjectActions";
 import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {NumberedArgumentFunction} from "@/app/types/handers/NumberedArgumentFunction";
 import Pagination from "@/ui/components/Pagination";
@@ -81,7 +81,7 @@ export default function ProjectsTable({data, loading, loadData, currentPage}: {
                                 </th>
                                 <th className="border px-4 py-2">
                                     {item.dateDeleted === null &&
-                                        <Actions loading={loading} handleRefresh={loadData} project={item}/>
+                                        <ProjectActions loading={loading} handleRefresh={loadData} project={item}/>
                                     }
                                 </th>
                             </tr>

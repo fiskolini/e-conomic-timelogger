@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,12 @@ namespace TimeLogger.Persistence.Common
     {
         public static void ConfigurePersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("e-conomic interview"));
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseInMemoryDatabase("e-conomic interview");
+                // Ignore transaction warnings
+                opt.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            });
 
             services.AddLogging(builder =>
             {

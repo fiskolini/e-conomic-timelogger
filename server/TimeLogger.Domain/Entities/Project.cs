@@ -11,7 +11,6 @@ namespace TimeLogger.Domain.Entities
         public string Name { get; set; }
         public DateTimeOffset? CompletedAt { get; set; }
         public DateTime? Deadline { get; set; }
-        public int TimeAllocated { get; set; }
 
         [ForeignKey("CustomerId")]
         public int CustomerId { get; set; }
@@ -19,6 +18,5 @@ namespace TimeLogger.Domain.Entities
         public Customer Customer { get; set; }
         
         public ICollection<Time> Times { get; set; }
-
     }
 }

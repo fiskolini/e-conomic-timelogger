@@ -12,6 +12,6 @@ namespace TimeLogger.Persistence.Context
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Time> TimeRegistrations { get; set; }
+        public DbSet<Time> Times { get; set; }
     }
 }

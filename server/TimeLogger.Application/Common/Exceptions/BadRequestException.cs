@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace TimeLogger.Application.Common.Exceptions
 {
@@ -11,7 +10,7 @@ namespace TimeLogger.Application.Common.Exceptions
         {
         }
 
-        public BadRequestException(string[] errors) : base("Multiple errors occurred. See error details.")
+        public BadRequestException(string[] errors) : base("Errors occurred. See error details.")
         {
             Errors = errors;
         }

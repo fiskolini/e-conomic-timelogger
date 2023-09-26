@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TimeLogger.Application.Features.Projects.Queries.GetById;
 using TimeLogger.Application.Features.Times.Commands.Create;
 using TimeLogger.Application.Features.Times.Commands.Delete;
 using TimeLogger.Application.Features.Times.Commands.Update;
@@ -13,7 +12,7 @@ using TimeLogger.Domain.Entities;
 
 namespace TimeLogger.Api.Controllers
 {
-    [Route("api/customers/{customerId:int}/projects/{projectId:int}/times")]
+    [Route("api/[controller]")]
     public class TimesController : Controller
     {
         private readonly IMediator _mediator;
@@ -34,14 +33,11 @@ namespace TimeLogger.Api.Controllers
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<GetSingleTimeResponse>> GetSingle(
-            int id,
             GetSingleTimeCommand command,
             CancellationToken cancellationToken)
         {
-            command.Id = id;
-
             var response = await _mediator.Send(command, cancellationToken);
             return Ok(response);
         }
@@ -50,11 +46,11 @@ namespace TimeLogger.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateTimeResponse>> Create(
-            [FromBody] CreateTimeCommand request,
+            [FromBody] CreateTimeCommand command,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(request, cancellationToken);
-            return Ok(response);
+            var response = await _mediator.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(GetSingle), new { id = response.Id }, response);
         }
 
         [HttpPatch("{id:int}")]
@@ -65,6 +61,7 @@ namespace TimeLogger.Api.Controllers
             [FromBody] UpdateTimeCommand command,
             CancellationToken cancellationToken)
         {
+            // Prevent someone to send mismatched data through payload
             command.Id = id;
 
             await _mediator.Send(command, cancellationToken);
@@ -74,11 +71,11 @@ namespace TimeLogger.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DeleteTimeResponse>> Delete(DeleteTimeCommand command,
+        public async Task<NoContentResult> Delete(DeleteTimeCommand request,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(command, cancellationToken);
-            return Ok(response);
+            await _mediator.Send(request, cancellationToken);
+            return NoContent();
         }
     }
 }

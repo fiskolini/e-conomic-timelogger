@@ -12,7 +12,7 @@ using TimeLogger.Domain.Entities;
 
 namespace TimeLogger.Api.Controllers
 {
-    [Route("api/customers/{customerId:int}/projects/")]
+    [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
         private readonly IMediator _mediator;
@@ -58,7 +58,7 @@ namespace TimeLogger.Api.Controllers
 
         [HttpPatch("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<UpdateProjectResponse>> Update(
             int id,
             [FromBody] UpdateProjectCommand command,
@@ -73,9 +73,13 @@ namespace TimeLogger.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DeleteProjectResponse>> Delete(DeleteProjectCommand command,
+        public async Task<ActionResult<DeleteProjectResponse>> Delete(
+            int id,
+            DeleteProjectCommand command,
             CancellationToken cancellationToken)
         {
+            command.Id = id;
+
             var response = await _mediator.Send(command, cancellationToken);
             return Ok(response);
         }

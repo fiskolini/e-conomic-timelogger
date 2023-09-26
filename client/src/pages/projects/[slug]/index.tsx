@@ -33,7 +33,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext): Pr
 
         const customerData = await getCustomerById(Number(slug));
         const projectsList = await getProjectsByCustomerId(Number(slug), request);
-        
+
         let response: Response = {
             data: projectsList.data,
             customer: customerData.data
@@ -55,6 +55,7 @@ export default function ProjectsPage({data, customer}: { data: ApiPagedResponse<
     let [searchState, setSearchState] = useState<string>('');
     let [loadingState, setLoadingState] = useState<boolean>(false);
     let [currentPageState, setCurrentPageState] = useState<number>(1);
+    let [focusState, setFocusState] = useState<boolean>(false);
 
 
     function refreshState(page?: number | undefined) {
@@ -66,6 +67,18 @@ export default function ProjectsPage({data, customer}: { data: ApiPagedResponse<
         }
 
         changeRoute(data);
+    }
+
+    function handleFocus() {
+        let routeAction;
+
+        if (!focusState) {
+            routeAction = changeRoute({orderBy: 'deadline asc'})
+        } else {
+            routeAction = changeRoute({orderBy: null})
+        }
+
+        routeAction.then(() => setFocusState(!focusState))
     }
 
     /**
@@ -134,14 +147,15 @@ export default function ProjectsPage({data, customer}: { data: ApiPagedResponse<
      */
     async function changeRoute(data: object) {
         setLoadingState(true);
+
         await router.replace({
             pathname: router.pathname,
             query: {
                 ...router.query,
                 ...data
             }
-        }, {}, {scroll: false});
-        return setLoadingState(false);
+        }, {}, {scroll: false})
+            .then(() => setLoadingState(false));
     }
 
     /**
@@ -170,6 +184,12 @@ export default function ProjectsPage({data, customer}: { data: ApiPagedResponse<
                         className={`${showDeletedState ? 'bg-red-600 hover:bg-red-800' : 'bg-green-600 hover:bg-green-800'} text-white font-bold py-2 px-4 rounded`}
                         onClick={handleSoftDeleted}>
                         {showDeletedState ? 'Hide' : 'Show'} Deleted
+                    </button>
+
+                    <button
+                        className={`${focusState ? 'bg-gray-900 hover:bg-black' : 'bg-gray-400 hover:bg-gray-600'} text-white font-bold py-2 px-4 rounded`}
+                        onClick={handleFocus}>
+                        Focus
                     </button>
                 </div>
 

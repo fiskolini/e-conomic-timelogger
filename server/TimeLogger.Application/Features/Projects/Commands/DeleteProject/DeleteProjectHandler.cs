@@ -26,18 +26,23 @@ namespace TimeLogger.Application.Features.Projects.Commands.DeleteProject
         public async Task<DeleteProjectResponse> Handle(DeleteProjectCommand command,
             CancellationToken cancellationToken)
         {
+            // Get the project to be deleted by its id
             var entityToDelete = await _projectRepository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToDelete is { DateDeleted: null }))
-            {
+            // Check if the project has already been soft-deleted
+            if (entityToDelete == null)
                 throw new ItemNotFoundException(command.Id);
-            }
 
+            // Set the DateDeleted property to the current UTC time
             entityToDelete.DateDeleted = DateTimeOffset.UtcNow;
+
+            // Update the project in the repository
             _projectRepository.Update(entityToDelete);
 
+            // Commit change
             await _unitOfWork.Commit(cancellationToken);
 
+            // Map the deleted project to DeleteProjectResponse and return it
             return _mapper.Map<DeleteProjectResponse>(entityToDelete);
         }
     }

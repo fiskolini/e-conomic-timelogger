@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TimeLogger.Application.Common.Exceptions.Common;
-using TimeLogger.Domain.Entities;
 using TimeLogger.Domain.Repositories;
 using TimeLogger.Domain.Repositories.Common;
 
@@ -25,20 +24,25 @@ namespace TimeLogger.Application.Features.Customers.Commands.Update
         public async Task<UpdateCustomerResponse> Handle(UpdateCustomerCommand command,
             CancellationToken cancellationToken)
         {
+            // Retrieve the customer entity to be updated based on the provided customer ID
             var entityToUpdate = await _repository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToUpdate is { DateDeleted: null }))
-            {
+            // If no customer entity is found, throw an ItemNotFoundException
+            if (entityToUpdate == null)
                 throw new ItemNotFoundException(command.Id);
-            }
 
+            // Map the data from the UpdateCustomerCommand to the existing customer entity
             _mapper.Map(command, entityToUpdate);
 
+            // Update the customer entity using the repository
             _repository.Update(entityToUpdate);
 
             await _unitOfWork.Commit(cancellationToken);
 
-            return _mapper.Map<UpdateCustomerResponse>(entityToUpdate);
+            // Map the updated customer entity to an UpdateCustomerResponse object
+            var response = _mapper.Map<UpdateCustomerResponse>(entityToUpdate);
+
+            return response;
         }
     }
 }

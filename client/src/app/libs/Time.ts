@@ -19,6 +19,6 @@ export const isValidFutureDate = (d: string) => {
     return (
         !isNaN(parsedDate.getTime()) &&
         d.trim() !== '' &&
-        parsedDate > new Date()
+        parsedDate >= new Date()
     )
 }

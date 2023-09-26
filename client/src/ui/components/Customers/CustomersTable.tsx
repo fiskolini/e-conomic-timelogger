@@ -6,6 +6,7 @@ import Pagination from "@/ui/components/Pagination";
 import {NumberedArgumentFunction} from "@/app/types/handers/NumberedArgumentFunction";
 import TableHeader from "@/ui/components/TableHeader";
 import isUndefined from "lodash/isUndefined";
+import TimeCreated from "@/ui/components/TimeCreated";
 
 
 export default function CustomersTable({data, loading, loadData, currentPage}: {
@@ -15,14 +16,14 @@ export default function CustomersTable({data, loading, loadData, currentPage}: {
     currentPage: number
 }) {
     const tableHeader = [
-        '#', 'Customer Name', 'N. Projects', 'Total Time Allocated', 'Actions'
+        '#', 'Customer Name', 'N. Projects', 'Time created', 'Actions'
     ];
 
     return (
         <>
             <table className={`table-fixed w-full ${loading ? 'opacity-50 cursor-wait' : ''}`}>
                 <TableHeader items={tableHeader}/>
-                
+
                 <tbody className='text-gray-500'>
                 {isUndefined(data) &&
                     // Skeleton while loading in the background
@@ -56,8 +57,8 @@ export default function CustomersTable({data, loading, loadData, currentPage}: {
                                 <th className="border px-4 py-2">
                                     {item.numberOfProjects}
                                 </th>
-                                <th className={`border px-4 py-2 ${item.totalTimeAllocated > 0 ? '' : 'opacity-50'}`}>
-                                    {item.totalTimeAllocated} <span className='text-xs text-gray-500'> mins.</span>
+                                <th className="border px-4 py-2">
+                                    <TimeCreated time={item.dateCreated}/>
                                 </th>
                                 <th className="border px-4 py-2">
                                     {item.dateDeleted === null &&
@@ -70,7 +71,7 @@ export default function CustomersTable({data, loading, loadData, currentPage}: {
                 }
                 </tbody>
             </table>
-            {!isUndefined(data) && 
+            {!isUndefined(data) &&
                 <Pagination data={data} loading={loading} loadHandler={loadData} currentPage={currentPage}/>
             }
         </>

@@ -6,6 +6,5 @@ namespace TimeLogger.Application.Features.Customers.Queries.GetById
     {
         public string Name { get; set; }
         public int NumberOfProjects { get; set; }
-        public int TotalTimeAllocated { get; set; }
     }
 }

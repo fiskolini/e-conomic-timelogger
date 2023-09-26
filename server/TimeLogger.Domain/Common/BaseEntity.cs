@@ -3,7 +3,7 @@ using TimeLogger.Domain.Contracts;
 
 namespace TimeLogger.Domain.Common
 {
-    public abstract class BaseEntity : IIdentifiableEntity
+    public abstract class BaseEntity : IIdentifiableEntity, ISoftDeletedEntity
     {
         public int Id { get; set; }
         public DateTimeOffset DateCreated { get; set; }

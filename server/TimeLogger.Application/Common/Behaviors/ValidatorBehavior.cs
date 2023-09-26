@@ -32,7 +32,7 @@ namespace TimeLogger.Application.Common.Behaviors
                 .Select(x => x.Validate(context))
                 .SelectMany(x => x.Errors)
                 .Where(x => x != null)
-                .Select(x => $"{x.ErrorMessage} '{x.AttemptedValue}' given.")
+                .Select(x => x.ErrorMessage)
                 .Distinct()
                 .ToArray();
 

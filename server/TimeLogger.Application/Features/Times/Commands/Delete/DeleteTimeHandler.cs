@@ -10,13 +10,11 @@ namespace TimeLogger.Application.Features.Times.Commands.Delete
 {
     public class DeleteTimeHandler : IRequestHandler<DeleteTimeCommand, DeleteTimeResponse>
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ITimeRepository _repository;
         private readonly IMapper _mapper;
 
-        public DeleteTimeHandler(IUnitOfWork unitOfWork, ITimeRepository repository, IMapper mapper)
+        public DeleteTimeHandler(ITimeRepository repository, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
             _repository = repository;
             _mapper = mapper;
         }
@@ -24,17 +22,13 @@ namespace TimeLogger.Application.Features.Times.Commands.Delete
         public async Task<DeleteTimeResponse> Handle(DeleteTimeCommand command,
             CancellationToken cancellationToken)
         {
-            // TODO filter by project id
             var entityToDelete = await _repository.GetSingle(command.Id, cancellationToken);
 
-            if (!(entityToDelete is { DateDeleted: null }))
-            {
+            if (entityToDelete == null)
                 throw new ItemNotFoundException(command.Id);
-            }
-            
-            _repository.SoftDelete(entityToDelete);
-            await _unitOfWork.Commit(cancellationToken);
 
+            _repository.SoftDelete(entityToDelete);
+            
             return _mapper.Map<DeleteTimeResponse>(entityToDelete);
         }
     }

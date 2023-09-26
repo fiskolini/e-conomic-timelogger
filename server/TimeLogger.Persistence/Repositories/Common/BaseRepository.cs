@@ -47,17 +47,6 @@ namespace TimeLogger.Persistence.Repositories.Common
         }
 
         /// <summary>
-        /// Get all items based on given query
-        /// </summary>
-        /// <param name="query">Query to plug</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected Task<List<T>> GetAll(IQueryable<T> query, CancellationToken cancellationToken)
-        {
-            return query.ToListAsync(cancellationToken);
-        }
-
-        /// <summary>
         /// Get entity by the given Id
         /// </summary>
         /// <param name="id">Id to filter</param>
@@ -95,6 +84,7 @@ namespace TimeLogger.Persistence.Repositories.Common
             var totalItems = await query.CountAsync(cancellationToken);
             var items = await query
                 .WithPagedResults(request)
+                .ApplySort(request.OrderBy)
                 .ToListAsync(cancellationToken);
 
             return new PagedResults<T>

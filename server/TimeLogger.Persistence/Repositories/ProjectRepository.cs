@@ -45,14 +45,15 @@ namespace TimeLogger.Persistence.Repositories
         {
             var query = Context.Set<Project>().AsQueryable()
                 .WhereCanBeSoftDeleted(considerDeleted)
-                .WhereNameContains(request.Search)
+                .WhereContainsNameOrId(request.Search)
+                .ApplySort(request.OrderBy)
                 .Where(x => x.CustomerId == customerId);
 
             var totalItems = await query.CountAsync(cancellationToken);
 
             query = query.WithPagedResults(request);
 
-            var results = await GetAll(query, cancellationToken);
+            var results = await query.ToListAsync(cancellationToken);
 
             return new PagedResults<Project>
             {
@@ -62,8 +63,7 @@ namespace TimeLogger.Persistence.Repositories
                 TotalItems = totalItems
             };
         }
-
-
+        
         /// <summary>
         /// Get project counts for given customer ids
         /// </summary>

@@ -6,7 +6,7 @@ export default function TimeAllocated({time}: { time: number }) {
     return (
         <span>
             {`${hours}h${minutes > 0 ? ` ${minutes}m` : ''}`}
-            {minutes > 0 &&
+            {time > 0 &&
                 <small className='ml-2 text-xs font-light text-gray-400'>{time}m</small>
             }
         </span>

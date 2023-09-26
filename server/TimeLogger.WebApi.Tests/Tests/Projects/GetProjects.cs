@@ -34,7 +34,7 @@ namespace TimeLogger.Api.Tests.Tests.Projects
 
             // Act
             var response = await _httpClient.GetAsync(
-                $"api/customers/{projectRequest.CustomerId}/projects/{projectRequest.Id}", cancellationToken);
+                $"api/projects/{projectRequest.Id}?customerId={projectRequest.CustomerId}", cancellationToken);
             var returnedJson = await response.Content.ReadAsStringAsync();
             var returnedProject = JsonConvert.DeserializeObject<GetSingleProjectResponse>(returnedJson);
 
@@ -59,7 +59,7 @@ namespace TimeLogger.Api.Tests.Tests.Projects
 
             // Act
             var response = await _httpClient.GetAsync(
-                $"api/customers/{request.CustomerId}/projects?pageNumber={request.PageNumber}&pageSize={request.PageSize}",
+                $"api/projects/?customerId={request.CustomerId}&pageNumber={request.PageNumber}&pageSize={request.PageSize}",
                 cancellationToken);
             var returnedJson = await response.Content.ReadAsStringAsync();
             var returnedCustomer = JsonConvert.DeserializeObject<PagedResults<GetProjectsResponse>>(returnedJson);
@@ -80,7 +80,7 @@ namespace TimeLogger.Api.Tests.Tests.Projects
 
             // Act
             var response = await _httpClient.GetAsync(
-                $"api/customers/{request.CustomerId}/projects?pageSize={request.PageSize}", cancellationToken);
+                $"api/projects?customerId={request.CustomerId}&pageSize={request.PageSize}", cancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

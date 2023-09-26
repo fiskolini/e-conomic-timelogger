@@ -6,16 +6,18 @@ export default function Deadline({children}: { children: string | ReactNode }) {
         return 'N/A';
     }
 
-    const d = new Date(children.toString() || '');
+    const date = new Date(children.toString() || '');
+    const today = new Date();
     let color = '';
 
-    if (new Date() >= d) {
+
+    if (date <= today) {
         color = 'text-red-400';
     }
 
     return (
         <span className={color}>
-            {d.toDateString()}
+            {date.toDateString()}
         </span>
     )
 }

@@ -1,9 +1,12 @@
 import {AxiosResponse} from "axios";
+
 import {Project} from "@/app/types/entities/Project";
 import {apiClient} from "@/app/api/apiClient";
 import {ApiPagedResponse} from "@/app/types/api/response/ApiPagedResponse";
 import {ApiPagedRequest} from "@/app/types/api/request/ApiPagedRequest";
 import {mapPagedRequest} from "@/app/libs/PagedRequestmapper";
+
+export const RESOURCE_URL = '/api/projects'
 
 /**
  * Create a new Project
@@ -13,8 +16,16 @@ export function createProject(project: {
     customerId: number,
     name: string;
     deadline?: string | null
-}): Promise<AxiosResponse<ApiPagedResponse<Project>>> {
-    return apiClient.post<ApiPagedResponse<Project>>(`/api/customers/${project.customerId}/projects`, project);
+}): Promise<AxiosResponse<Project>> {
+    return apiClient.post<Project>(RESOURCE_URL, project);
+}
+
+/**
+ * Load project by its given id
+ * @param projectId
+ */
+export function getProjectById(projectId: number): Promise<AxiosResponse<Project>> {
+    return apiClient.get<Project>(`${RESOURCE_URL}/${projectId}`);
 }
 
 /**
@@ -24,21 +35,24 @@ export function createProject(project: {
  */
 export function getProjectsByCustomerId(customerId: number, request: ApiPagedRequest): Promise<AxiosResponse<ApiPagedResponse<Project>>> {
     let params: ApiPagedRequest = mapPagedRequest(request);
-    return apiClient.get<ApiPagedResponse<Project>>(`/api/customers/${customerId}/projects`, {params});
+    console.log(params, request);
+    
+    
+    return apiClient.get<ApiPagedResponse<Project>>(`${RESOURCE_URL}?customerId=${customerId}`, {params});
 }
 
 /**
  * Update given project
- * @param data
+ * @param project
  */
-export function updateProject(data: Project): Promise<AxiosResponse<Project>> {
-    return apiClient.patch<Project>(`/api/customers/${data.customerId}/projects/${data.id}`, data);
+export function updateProject(project: Project): Promise<AxiosResponse<Project>> {
+    return apiClient.patch<Project>(`${RESOURCE_URL}/${project.id}`, project);
 }
 
 /**
  * Delete given project
  * @param project
  */
-export function deleteProject(project: Project): Promise<AxiosResponse<ApiPagedResponse<Project>>> {
-    return apiClient.delete<ApiPagedResponse<Project>>(`/api/customers/${project.customerId}/projects/${project.id}`);
+export function deleteProject(project: Project): Promise<AxiosResponse<Project>> {
+    return apiClient.delete<Project>(`${RESOURCE_URL}/${project.id}`);
 }

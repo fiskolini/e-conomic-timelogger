@@ -9,5 +9,6 @@ namespace TimeLogger.Application.Features.Projects.Queries.GetById
         public int TimeAllocated { get; set; }
         public DateTimeOffset? CompletedAt { get; set; }
         public DateTimeOffset? Deadline { get; set; }
+        public int CustomerId { get; set; }
     }
 }
